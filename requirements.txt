@@ -1,0 +1,26 @@
+# ChronoCast Requirements
+# Core dependencies
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+xgboost
+scipy
+
+# Week 2: Explainability & Visualization
+plotly
+shap
+
+# Model persistence
+joblib
+
+# Development dependencies
+pytest
+pytest-cov
+jupyter
+notebook
+
+# Optional: For better formatting
+black
+flake8

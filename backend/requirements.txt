@@ -1,0 +1,31 @@
+# Django Backend Requirements
+
+# Django & REST Framework
+Django
+djangorestframework
+django-cors-headers
+
+# Database
+psycopg2-binary  # PostgreSQL
+
+# API Documentation
+drf-yasg  # Swagger/OpenAPI
+
+# File handling
+python-multipart
+
+# Environment variables
+python-dotenv
+
+# ChronoCast library (install from parent directory)
+# pip install -e ../
+
+# Core ML dependencies (if not installed via ChronoCast)
+pandas
+numpy
+scikit-learn
+xgboost
+
+# Background tasks (optional)
+celery
+redis

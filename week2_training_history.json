@@ -1,0 +1,170 @@
+[
+    {
+        "run_id": "run_20251027_161736",
+        "model_name": "Random Forest",
+        "params": {
+            "n_estimators": 100,
+            "max_depth": 10
+        },
+        "start_time": "2025-10-27T16:17:36.973338",
+        "status": "completed",
+        "data_info": {
+            "n_samples": 280,
+            "n_features": 29,
+            "feature_names": [
+                "year",
+                "month",
+                "day",
+                "day_of_week",
+                "day_of_year",
+                "week_of_year",
+                "quarter",
+                "is_weekend",
+                "is_month_start",
+                "is_month_end",
+                "is_quarter_start",
+                "is_quarter_end",
+                "month_sin",
+                "month_cos",
+                "day_of_week_sin",
+                "day_of_week_cos",
+                "views_lag_1",
+                "views_lag_7",
+                "views_lag_14",
+                "views_rolling_mean_7",
+                "views_rolling_std_7",
+                "views_rolling_min_7",
+                "views_rolling_max_7",
+                "views_rolling_mean_14",
+                "views_rolling_std_14",
+                "views_rolling_min_14",
+                "views_rolling_max_14",
+                "category_B",
+                "category_C"
+            ]
+        },
+        "end_time": "2025-10-27T16:17:37.447065",
+        "training_time": 0.458737,
+        "metrics": {
+            "MSE": 604.2362271525765,
+            "RMSE": 24.58121695833175,
+            "MAE": 19.40914279420832,
+            "MAPE": 10.633990900226486,
+            "R\u00b2": 0.2984280534084601,
+            "SMAPE": 10.501226986761981,
+            "Bias": -1.2276559852064386
+        }
+    },
+    {
+        "run_id": "run_20251027_161737",
+        "model_name": "XGBoost",
+        "params": {
+            "n_estimators": 100,
+            "learning_rate": 0.1
+        },
+        "start_time": "2025-10-27T16:17:37.452738",
+        "status": "completed",
+        "data_info": {
+            "n_samples": 280,
+            "n_features": 29,
+            "feature_names": [
+                "year",
+                "month",
+                "day",
+                "day_of_week",
+                "day_of_year",
+                "week_of_year",
+                "quarter",
+                "is_weekend",
+                "is_month_start",
+                "is_month_end",
+                "is_quarter_start",
+                "is_quarter_end",
+                "month_sin",
+                "month_cos",
+                "day_of_week_sin",
+                "day_of_week_cos",
+                "views_lag_1",
+                "views_lag_7",
+                "views_lag_14",
+                "views_rolling_mean_7",
+                "views_rolling_std_7",
+                "views_rolling_min_7",
+                "views_rolling_max_7",
+                "views_rolling_mean_14",
+                "views_rolling_std_14",
+                "views_rolling_min_14",
+                "views_rolling_max_14",
+                "category_B",
+                "category_C"
+            ]
+        },
+        "end_time": "2025-10-27T16:17:37.664615",
+        "training_time": 0.199884,
+        "metrics": {
+            "MSE": 759.4931602842395,
+            "RMSE": 27.558903466651923,
+            "MAE": 21.606063459904654,
+            "MAPE": 11.35362475781382,
+            "R\u00b2": 0.11816095934111137,
+            "SMAPE": 11.63005138220103,
+            "Bias": -6.754063607877297
+        }
+    },
+    {
+        "run_id": "run_20251027_161737",
+        "model_name": "Gradient Boosting",
+        "params": {
+            "n_estimators": 100,
+            "learning_rate": 0.1
+        },
+        "start_time": "2025-10-27T16:17:37.669614",
+        "status": "completed",
+        "data_info": {
+            "n_samples": 280,
+            "n_features": 29,
+            "feature_names": [
+                "year",
+                "month",
+                "day",
+                "day_of_week",
+                "day_of_year",
+                "week_of_year",
+                "quarter",
+                "is_weekend",
+                "is_month_start",
+                "is_month_end",
+                "is_quarter_start",
+                "is_quarter_end",
+                "month_sin",
+                "month_cos",
+                "day_of_week_sin",
+                "day_of_week_cos",
+                "views_lag_1",
+                "views_lag_7",
+                "views_lag_14",
+                "views_rolling_mean_7",
+                "views_rolling_std_7",
+                "views_rolling_min_7",
+                "views_rolling_max_7",
+                "views_rolling_mean_14",
+                "views_rolling_std_14",
+                "views_rolling_min_14",
+                "views_rolling_max_14",
+                "category_B",
+                "category_C"
+            ]
+        },
+        "end_time": "2025-10-27T16:17:38.106366",
+        "training_time": 0.427758,
+        "metrics": {
+            "MSE": 644.6700399380544,
+            "RMSE": 25.39035328501859,
+            "MAE": 20.191156356919336,
+            "MAPE": 10.540097994590107,
+            "R\u00b2": 0.2514808041882265,
+            "SMAPE": 10.89283452850077,
+            "Bias": -9.464204204923007
+        }
+    }
+]

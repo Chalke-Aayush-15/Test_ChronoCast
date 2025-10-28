@@ -1,0 +1,13 @@
+# Ignore virtual environments
+venv/
+*/venv/
+
+# Python ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.env
+.DS_Store

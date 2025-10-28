@@ -1,0 +1,76 @@
+======================================================================
+ChronoCast Training Report
+======================================================================
+
+Total training runs: 3
+Report generated: 2025-10-27 16:18:00
+
+
+----------------------------------------------------------------------
+Run #1: run_20251027_161736
+----------------------------------------------------------------------
+Model: Random Forest
+Status: completed
+Start: 2025-10-27T16:17:36.973338
+Training time: 0.46s
+Samples: 280
+Features: 29
+
+Metrics:
+  MSE: 604.2362
+  RMSE: 24.5812
+  MAE: 19.4091
+  MAPE: 10.6340
+  R²: 0.2984
+  SMAPE: 10.5012
+  Bias: -1.2277
+
+Parameters:
+  n_estimators: 100
+  max_depth: 10
+
+----------------------------------------------------------------------
+Run #2: run_20251027_161737
+----------------------------------------------------------------------
+Model: XGBoost
+Status: completed
+Start: 2025-10-27T16:17:37.452738
+Training time: 0.20s
+Samples: 280
+Features: 29
+
+Metrics:
+  MSE: 759.4932
+  RMSE: 27.5589
+  MAE: 21.6061
+  MAPE: 11.3536
+  R²: 0.1182
+  SMAPE: 11.6301
+  Bias: -6.7541
+
+Parameters:
+  n_estimators: 100
+  learning_rate: 0.1
+
+----------------------------------------------------------------------
+Run #3: run_20251027_161737
+----------------------------------------------------------------------
+Model: Gradient Boosting
+Status: completed
+Start: 2025-10-27T16:17:37.669614
+Training time: 0.43s
+Samples: 280
+Features: 29
+
+Metrics:
+  MSE: 644.6700
+  RMSE: 25.3904
+  MAE: 20.1912
+  MAPE: 10.5401
+  R²: 0.2515
+  SMAPE: 10.8928
+  Bias: -9.4642
+
+Parameters:
+  n_estimators: 100
+  learning_rate: 0.1

@@ -1,0 +1,56 @@
+2025-10-23 11:10:55 - ChronoCast - INFO - Started training run: run_20251023_111055
+2025-10-23 11:10:55 - ChronoCast - INFO - Model: Random Forest
+2025-10-23 11:10:55 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "max_depth": 10
+}
+2025-10-23 11:10:55 - ChronoCast - INFO - Training data: 280 samples, 29 features
+2025-10-23 11:10:56 - ChronoCast - INFO - Training completed in 0.68s
+2025-10-23 11:10:56 - ChronoCast - INFO - Metrics: {
+  "MSE": 777.0248193291444,
+  "RMSE": 27.875164920214274,
+  "MAE": 21.43607371976382,
+  "MAPE": 10.481043554983964,
+  "R\u00b2": 0.13557561369510118,
+  "SMAPE": 11.169698047430433,
+  "Bias": -14.69076178867501
+}
+2025-10-23 11:10:56 - ChronoCast - INFO - Logged experiment: Random Forest
+2025-10-23 11:10:56 - ChronoCast - INFO - Started training run: run_20251023_111056
+2025-10-23 11:10:56 - ChronoCast - INFO - Model: XGBoost
+2025-10-23 11:10:56 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "learning_rate": 0.1
+}
+2025-10-23 11:10:56 - ChronoCast - INFO - Training data: 280 samples, 29 features
+2025-10-23 11:10:56 - ChronoCast - INFO - Training completed in 0.55s
+2025-10-23 11:10:56 - ChronoCast - INFO - Metrics: {
+  "MSE": 961.0270894694149,
+  "RMSE": 31.000436923846976,
+  "MAE": 23.58614615068249,
+  "MAPE": 11.428484199802464,
+  "R\u00b2": -0.06912318805235773,
+  "SMAPE": 12.403075960990927,
+  "Bias": -18.479211440793375
+}
+2025-10-23 11:10:56 - ChronoCast - INFO - Logged experiment: XGBoost
+2025-10-23 11:10:56 - ChronoCast - INFO - Started training run: run_20251023_111056
+2025-10-23 11:10:56 - ChronoCast - INFO - Model: Gradient Boosting
+2025-10-23 11:10:56 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "learning_rate": 0.1
+}
+2025-10-23 11:10:56 - ChronoCast - INFO - Training data: 280 samples, 29 features
+2025-10-23 11:10:57 - ChronoCast - INFO - Training completed in 0.46s
+2025-10-23 11:10:57 - ChronoCast - INFO - Metrics: {
+  "MSE": 571.5825062576896,
+  "RMSE": 23.907791747831702,
+  "MAE": 18.36540223014267,
+  "MAPE": 9.20222690374314,
+  "R\u00b2": 0.3641260293062467,
+  "SMAPE": 9.511087635970632,
+  "Bias": -7.1736352992029495
+}
+2025-10-23 11:10:57 - ChronoCast - INFO - Logged experiment: Gradient Boosting
+2025-10-23 11:11:26 - ChronoCast - INFO - Training history exported to: week2_training_history.json
+2025-10-23 11:11:26 - ChronoCast - INFO - Report generated: week2_training_report.txt

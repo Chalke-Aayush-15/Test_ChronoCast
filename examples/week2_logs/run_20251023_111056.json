@@ -1,0 +1,56 @@
+{
+    "run_id": "run_20251023_111056",
+    "model_name": "Gradient Boosting",
+    "params": {
+        "n_estimators": 100,
+        "learning_rate": 0.1
+    },
+    "start_time": "2025-10-23T11:10:56.837360",
+    "status": "completed",
+    "data_info": {
+        "n_samples": 280,
+        "n_features": 29,
+        "feature_names": [
+            "year",
+            "month",
+            "day",
+            "day_of_week",
+            "day_of_year",
+            "week_of_year",
+            "quarter",
+            "is_weekend",
+            "is_month_start",
+            "is_month_end",
+            "is_quarter_start",
+            "is_quarter_end",
+            "month_sin",
+            "month_cos",
+            "day_of_week_sin",
+            "day_of_week_cos",
+            "views_lag_1",
+            "views_lag_7",
+            "views_lag_14",
+            "views_rolling_mean_7",
+            "views_rolling_std_7",
+            "views_rolling_min_7",
+            "views_rolling_max_7",
+            "views_rolling_mean_14",
+            "views_rolling_std_14",
+            "views_rolling_min_14",
+            "views_rolling_max_14",
+            "category_B",
+            "category_C"
+        ]
+    },
+    "end_time": "2025-10-23T11:10:57.308094",
+    "training_time": 0.461736,
+    "metrics": {
+        "MSE": 571.5825062576896,
+        "RMSE": 23.907791747831702,
+        "MAE": 18.36540223014267,
+        "MAPE": 9.20222690374314,
+        "R\u00b2": 0.3641260293062467,
+        "SMAPE": 9.511087635970632,
+        "Bias": -7.1736352992029495
+    }
+}
