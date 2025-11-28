@@ -41,7 +41,12 @@ class DatasetViewSet(viewsets.ModelViewSet):
     """
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    parser_classes = (MultiPartParser, FormParser)
+    
+    def get_parser_classes(self):
+        """Use different parsers based on action"""
+        if self.action == 'create':
+            return [MultiPartParser, FormParser]
+        return super().get_parser_classes()
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -175,6 +180,13 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
         forecast_run.save()
         
         try:
+            # Validate dataset columns are set
+            if not dataset.date_column or not dataset.target_column:
+                raise ValueError(
+                    f"Dataset columns not configured. "
+                    f"Please validate the dataset first by setting date_column and target_column."
+                )
+            
             # Load data
             loader = TimeSeriesDataLoader()
             data = loader.load_csv(

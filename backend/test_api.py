@@ -52,9 +52,10 @@ def test_api():
     data.to_csv(csv_path, index=False)
     
     # Upload dataset
-    files = {'file': open(csv_path, 'rb')}
-    data_payload = {'name': 'Test Dataset', 'description': 'API test data'}
-    response = requests.post(f"{BASE_URL}/datasets/", files=files, data=data_payload)
+    with open(csv_path, 'rb') as f:
+        files = {'file': f}
+        data_payload = {'name': 'Test Dataset', 'description': 'API test data'}
+        response = requests.post(f"{BASE_URL}/datasets/", files=files, data=data_payload)
     print_response(response, "Upload Dataset")
     
     if response.status_code != 201:
@@ -72,9 +73,14 @@ def test_api():
     }
     response = requests.post(
         f"{BASE_URL}/datasets/{dataset_id}/validate/",
-        json=validate_payload
+        json=validate_payload,
+        headers={'Content-Type': 'application/json'}
     )
     print_response(response, "Validate Dataset")
+    
+    if response.status_code != 200:
+        print("❌ Validation failed, cannot continue")
+        return
     
     # 4. Preview dataset
     print("\n4. Previewing Dataset...")
@@ -213,7 +219,11 @@ def test_api():
                 print_response(response, "Comparison Chart Data")
     
     # Cleanup
-    csv_path.unlink()
+    try:
+        if csv_path.exists():
+            csv_path.unlink()
+    except PermissionError:
+        print("⚠ Note: test_data.csv will be reused on next run")
     
     print("\n" + "="*70)
     print("API Test Complete! ✅")
