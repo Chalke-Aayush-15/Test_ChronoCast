@@ -2,9 +2,9 @@ Metadata-Version: 2.4
 Name: chronocast
 Version: 0.1.0
 Summary: A transparent and modular time series forecasting library
-Home-page: https://github.com/yourusername/chronocast
-Author: Your Name
-Author-email: your.email@example.com
+Home-page: https://github.com/chalke-Aayush-15/chronocast
+Author: Aayush Chalke
+Author-email: aayushchalke1501@gmail.com
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
@@ -65,7 +65,7 @@ ChronoCast is designed to make time series forecasting:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/chronocast.git
+git clone https://github.com/chalke-Aayush-15/chronocast.git
 cd chronocast
 
 # Create virtual environment
@@ -150,4 +150,4 @@ This project is licensed under the MIT License.
 
 ## 👤 Author
 
-Your Name - [GitHub](https://github.com/yourusername)
+Aayush Chalke - [GitHub](https://github.com/chalke-Aayush-15)

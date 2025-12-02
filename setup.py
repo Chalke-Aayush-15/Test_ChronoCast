@@ -6,12 +6,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="chronocast",
     version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Aayush Chalke",
+    author_email="aayushchalke1501@gmail.com",
     description="A transparent and modular time series forecasting library",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/chronocast",
+    url="https://github.com/chalke-Aayush-15/chronocast",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",

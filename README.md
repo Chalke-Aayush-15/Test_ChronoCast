@@ -25,7 +25,7 @@ ChronoCast is designed to make time series forecasting:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/chronocast.git
+git clone https://github.com/chalke-Aayush-15/chronocast.git
 cd chronocast
 
 # Create virtual environment
@@ -110,4 +110,4 @@ This project is licensed under the MIT License.
 
 ## 👤 Author
 
-Your Name - [GitHub](https://github.com/yourusername)
+Aayush Chalke - [GitHub](https://github.com/chalke-Aayush-15/)
