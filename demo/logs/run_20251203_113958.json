@@ -1,0 +1,63 @@
+{
+    "run_id": "run_20251203_113958",
+    "model_name": "Random Forest",
+    "params": {
+        "n_estimators": 100,
+        "max_depth": 15
+    },
+    "start_time": "2025-12-03T11:39:58.492738",
+    "status": "completed",
+    "data_info": {
+        "n_samples": 408,
+        "n_features": 36,
+        "feature_names": [
+            "year",
+            "month",
+            "day",
+            "day_of_week",
+            "day_of_year",
+            "week_of_year",
+            "quarter",
+            "is_weekend",
+            "is_month_start",
+            "is_month_end",
+            "is_quarter_start",
+            "is_quarter_end",
+            "month_sin",
+            "month_cos",
+            "day_of_week_sin",
+            "day_of_week_cos",
+            "views_lag_1",
+            "views_lag_7",
+            "views_lag_14",
+            "views_lag_30",
+            "views_rolling_mean_7",
+            "views_rolling_std_7",
+            "views_rolling_min_7",
+            "views_rolling_max_7",
+            "views_rolling_mean_14",
+            "views_rolling_std_14",
+            "views_rolling_min_14",
+            "views_rolling_max_14",
+            "views_rolling_mean_30",
+            "views_rolling_std_30",
+            "views_rolling_min_30",
+            "views_rolling_max_30",
+            "category_lifestyle",
+            "category_news",
+            "category_tech",
+            "category_tutorial"
+        ]
+    },
+    "end_time": "2025-12-03T11:39:59.495224",
+    "training_time": 0.981482,
+    "metrics": {
+        "MSE": 13058.253261983878,
+        "RMSE": 114.27271442467742,
+        "MAE": 90.36070908013556,
+        "MAPE": 7.9938807995068615,
+        "R\u00b2": 0.5007408645103244,
+        "SMAPE": 8.050008442458507,
+        "Bias": -9.805018752489374
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "timestamp": "2025-12-03T11:40:22.629141",
+    "model_type": "Ridge",
+    "explainer_type": "linear",
+    "n_features": 36,
+    "n_samples": 102,
+    "shap_available": true,
+    "shap_summary": {
+        "mean_abs_shap": 49.992390063669184,
+        "max_abs_shap": 769.811542265607,
+        "min_abs_shap": 0.00198332956372232
+    }
+}
