@@ -1,0 +1,63 @@
+{
+    "run_id": "run_20251213_153525",
+    "model_name": "Gradient Boosting",
+    "params": {
+        "n_estimators": 100,
+        "learning_rate": 0.1
+    },
+    "start_time": "2025-12-13T15:35:25.505170",
+    "status": "completed",
+    "data_info": {
+        "n_samples": 408,
+        "n_features": 36,
+        "feature_names": [
+            "year",
+            "month",
+            "day",
+            "day_of_week",
+            "day_of_year",
+            "week_of_year",
+            "quarter",
+            "is_weekend",
+            "is_month_start",
+            "is_month_end",
+            "is_quarter_start",
+            "is_quarter_end",
+            "month_sin",
+            "month_cos",
+            "day_of_week_sin",
+            "day_of_week_cos",
+            "views_lag_1",
+            "views_lag_7",
+            "views_lag_14",
+            "views_lag_30",
+            "views_rolling_mean_7",
+            "views_rolling_std_7",
+            "views_rolling_min_7",
+            "views_rolling_max_7",
+            "views_rolling_mean_14",
+            "views_rolling_std_14",
+            "views_rolling_min_14",
+            "views_rolling_max_14",
+            "views_rolling_mean_30",
+            "views_rolling_std_30",
+            "views_rolling_min_30",
+            "views_rolling_max_30",
+            "category_lifestyle",
+            "category_news",
+            "category_tech",
+            "category_tutorial"
+        ]
+    },
+    "end_time": "2025-12-13T15:35:26.431162",
+    "training_time": 0.918987,
+    "metrics": {
+        "MSE": 14321.170625563542,
+        "RMSE": 119.67109352539377,
+        "MAE": 95.1470345242178,
+        "MAPE": 8.460559557906883,
+        "R\u00b2": 0.4524554607518212,
+        "SMAPE": 8.474161699458858,
+        "Bias": -7.866864738230358
+    }
+}

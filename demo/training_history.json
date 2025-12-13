@@ -1,9 +1,9 @@
 [
     {
-        "run_id": "run_20251203_113958",
+        "run_id": "run_20251213_153524",
         "model_name": "Linear Regression",
         "params": {},
-        "start_time": "2025-12-03T11:39:58.418505",
+        "start_time": "2025-12-13T15:35:24.483134",
         "status": "completed",
         "data_info": {
             "n_samples": 408,
@@ -47,8 +47,8 @@
                 "category_tutorial"
             ]
         },
-        "end_time": "2025-12-03T11:39:58.453236",
-        "training_time": 0.026712,
+        "end_time": "2025-12-13T15:35:24.538121",
+        "training_time": 0.041984,
         "metrics": {
             "MSE": 10625.671118397291,
             "RMSE": 103.08089599143622,
@@ -60,12 +60,12 @@
         }
     },
     {
-        "run_id": "run_20251203_113958",
+        "run_id": "run_20251213_153524",
         "model_name": "Ridge Regression",
         "params": {
             "alpha": 10.0
         },
-        "start_time": "2025-12-03T11:39:58.458742",
+        "start_time": "2025-12-13T15:35:24.574099",
         "status": "completed",
         "data_info": {
             "n_samples": 408,
@@ -109,8 +109,8 @@
                 "category_tutorial"
             ]
         },
-        "end_time": "2025-12-03T11:39:58.487758",
-        "training_time": 0.019,
+        "end_time": "2025-12-13T15:35:24.602520",
+        "training_time": 0.01741,
         "metrics": {
             "MSE": 10161.563898547025,
             "RMSE": 100.80458272592088,
@@ -122,13 +122,13 @@
         }
     },
     {
-        "run_id": "run_20251203_113958",
+        "run_id": "run_20251213_153524",
         "model_name": "Random Forest",
         "params": {
             "n_estimators": 100,
             "max_depth": 15
         },
-        "start_time": "2025-12-03T11:39:58.492738",
+        "start_time": "2025-12-13T15:35:24.605520",
         "status": "completed",
         "data_info": {
             "n_samples": 408,
@@ -172,8 +172,8 @@
                 "category_tutorial"
             ]
         },
-        "end_time": "2025-12-03T11:39:59.495224",
-        "training_time": 0.981482,
+        "end_time": "2025-12-13T15:35:25.503190",
+        "training_time": 0.874681,
         "metrics": {
             "MSE": 13058.253261983878,
             "RMSE": 114.27271442467742,
@@ -185,13 +185,13 @@
         }
     },
     {
-        "run_id": "run_20251203_113959",
+        "run_id": "run_20251213_153525",
         "model_name": "Gradient Boosting",
         "params": {
             "n_estimators": 100,
             "learning_rate": 0.1
         },
-        "start_time": "2025-12-03T11:39:59.499204",
+        "start_time": "2025-12-13T15:35:25.505170",
         "status": "completed",
         "data_info": {
             "n_samples": 408,
@@ -235,8 +235,8 @@
                 "category_tutorial"
             ]
         },
-        "end_time": "2025-12-03T11:40:00.347652",
-        "training_time": 0.841241,
+        "end_time": "2025-12-13T15:35:26.431162",
+        "training_time": 0.918987,
         "metrics": {
             "MSE": 14321.170625563542,
             "RMSE": 119.67109352539377,
@@ -248,14 +248,14 @@
         }
     },
     {
-        "run_id": "run_20251203_114000",
+        "run_id": "run_20251213_153526",
         "model_name": "XGBoost",
         "params": {
             "n_estimators": 100,
             "learning_rate": 0.1,
             "max_depth": 6
         },
-        "start_time": "2025-12-03T11:40:00.350650",
+        "start_time": "2025-12-13T15:35:26.434163",
         "status": "completed",
         "data_info": {
             "n_samples": 408,
@@ -299,8 +299,8 @@
                 "category_tutorial"
             ]
         },
-        "end_time": "2025-12-03T11:40:00.790284",
-        "training_time": 0.422642,
+        "end_time": "2025-12-13T15:35:26.882647",
+        "training_time": 0.433492,
         "metrics": {
             "MSE": 16513.26953125,
             "RMSE": 128.50396698643198,
