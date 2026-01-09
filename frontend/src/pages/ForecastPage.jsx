@@ -43,6 +43,34 @@ export default function ForecastPage() {
     }
   };
   
+  const getFilteredModelParams = (type, params) => {
+    // Create a copy of params to avoid mutating the original
+    const filteredParams = { ...params };
+    
+    // Handle different model types
+    switch(type) {
+      case 'linear':
+      case 'ridge':
+      case 'lasso':
+        // Linear models don't use tree-based parameters
+        const { n_estimators, max_depth, learning_rate, ...linearParams } = filteredParams;
+        return linearParams;
+        
+      case 'rf':
+        // Random Forest doesn't use learning_rate
+        const { learning_rate: rfLearningRate, ...rfParams } = filteredParams;
+        return rfParams;
+        
+      case 'gbm':
+      case 'xgb':
+        // These models use all the parameters we have
+        return filteredParams;
+        
+      default:
+        return filteredParams;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -57,11 +85,14 @@ export default function ForecastPage() {
     setStatus('pending');
     
     try {
-      // Create forecast run
+      // Filter model parameters based on model type
+      const filteredParams = getFilteredModelParams(modelType, modelParams);
+      
+      // Create forecast run with filtered parameters
       const response = await forecastAPI.create({
         dataset: selectedDataset,
         model_type: modelType,
-        model_params: modelParams,
+        model_params: filteredParams,
         use_time_features: true,
         use_lag_features: true,
         lag_periods: lagPeriods,
