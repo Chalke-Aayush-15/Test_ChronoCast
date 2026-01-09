@@ -112,8 +112,11 @@ export default function ForecastPage() {
         2000
       );
       
-      // Navigate to results
-      navigate(`/forecast/${runId}`);
+      const handleViewResults = (forecastId) => {
+        navigate(`/forecast/${forecastId}`);
+      };
+      
+      handleViewResults(runId);
       
     } catch (err) {
       const { message } = handleAPIError(err);
