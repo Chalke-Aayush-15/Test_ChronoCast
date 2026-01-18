@@ -9,6 +9,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    exclude: [
+      'lucide-react',
+      'history',
+      'react-router-dom'
+    ]
+  },
   server: {
     port: 3000,
     proxy: {
@@ -17,5 +24,8 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  css: {
+    postcss: './postcss.config.js',
   },
 })
