@@ -1,0 +1,73 @@
+================================================================================
+                    ChronoCast Blog Forecasting Demo - Summary
+================================================================================
+
+Dataset Information:
+--------------------------------------------------------------------------------
+  Total days: 540
+  Date range: 2023-01-01 to 2024-06-23
+  Total views: 433,470
+  Average views/day: 803
+  Categories: business, lifestyle, news, tutorial, tech
+
+Model Performance:
+--------------------------------------------------------------------------------
+
+Linear Regression:
+  RMSE: 103.08
+  MAE: 80.35
+  R²: 0.5937
+  MAPE: 7.01%
+
+Ridge Regression:
+  RMSE: 100.80
+  MAE: 80.20
+  R²: 0.6115
+  MAPE: 7.08%
+
+Random Forest:
+  RMSE: 114.27
+  MAE: 90.36
+  R²: 0.5007
+  MAPE: 7.99%
+
+Gradient Boosting:
+  RMSE: 119.67
+  MAE: 95.15
+  R²: 0.4525
+  MAPE: 8.46%
+
+XGBoost:
+  RMSE: 128.50
+  MAE: 100.50
+  R²: 0.3686
+  MAPE: 8.71%
+
+
+Best Model: Ridge Regression
+--------------------------------------------------------------------------------
+  Test RMSE: 100.80
+  Test R²: 0.6115
+  Training time: 0.02s
+
+
+Top 5 Important Features:
+--------------------------------------------------------------------------------
+  is_weekend                    : 103.8097
+  category_tutorial             : 57.2927
+  day_of_week_cos               : 30.4068
+  category_lifestyle            : 24.1331
+  is_month_end                  : 21.1976
+
+
+Generated Files:
+--------------------------------------------------------------------------------
+  • blog_data.csv - Original dataset
+  • 01_exploratory_analysis.png - EDA visualizations
+  • 02_complete_forecast_analysis.png - Model results
+  • 03_feature_importance.png - Feature importance
+  • 04_shap_summary.png - SHAP analysis
+  • 05_shap_waterfall.png - SHAP waterfall
+  • training_history.json - Training logs
+  • training_report.txt - Detailed report
+  • explainability_log.json - Explainability metadata

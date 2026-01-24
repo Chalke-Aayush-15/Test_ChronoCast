@@ -1,0 +1,84 @@
+2025-12-03 11:39:58 - ChronoCast - INFO - Started training run: run_20251203_113958
+2025-12-03 11:39:58 - ChronoCast - INFO - Model: Linear Regression
+2025-12-03 11:39:58 - ChronoCast - INFO - Parameters: {}
+2025-12-03 11:39:58 - ChronoCast - INFO - Training data: 408 samples, 36 features
+2025-12-03 11:39:58 - ChronoCast - INFO - Training completed in 0.03s
+2025-12-03 11:39:58 - ChronoCast - INFO - Metrics: {
+  "MSE": 10625.671118397291,
+  "RMSE": 103.08089599143622,
+  "MAE": 80.35255560106923,
+  "MAPE": 7.013321742849064,
+  "R\u00b2": 0.5937463250147832,
+  "SMAPE": 7.1326627111143255,
+  "Bias": -18.501616232682363
+}
+2025-12-03 11:39:58 - ChronoCast - INFO - Started training run: run_20251203_113958
+2025-12-03 11:39:58 - ChronoCast - INFO - Model: Ridge Regression
+2025-12-03 11:39:58 - ChronoCast - INFO - Parameters: {
+  "alpha": 10.0
+}
+2025-12-03 11:39:58 - ChronoCast - INFO - Training data: 408 samples, 36 features
+2025-12-03 11:39:58 - ChronoCast - INFO - Training completed in 0.02s
+2025-12-03 11:39:58 - ChronoCast - INFO - Metrics: {
+  "MSE": 10161.563898547025,
+  "RMSE": 100.80458272592088,
+  "MAE": 80.1984013460008,
+  "MAPE": 7.077238678877992,
+  "R\u00b2": 0.6114906407902729,
+  "SMAPE": 7.074546269061662,
+  "Bias": -1.7414013120670042
+}
+2025-12-03 11:39:58 - ChronoCast - INFO - Started training run: run_20251203_113958
+2025-12-03 11:39:58 - ChronoCast - INFO - Model: Random Forest
+2025-12-03 11:39:58 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "max_depth": 15
+}
+2025-12-03 11:39:58 - ChronoCast - INFO - Training data: 408 samples, 36 features
+2025-12-03 11:39:59 - ChronoCast - INFO - Training completed in 0.98s
+2025-12-03 11:39:59 - ChronoCast - INFO - Metrics: {
+  "MSE": 13058.253261983878,
+  "RMSE": 114.27271442467742,
+  "MAE": 90.36070908013556,
+  "MAPE": 7.9938807995068615,
+  "R\u00b2": 0.5007408645103244,
+  "SMAPE": 8.050008442458507,
+  "Bias": -9.805018752489374
+}
+2025-12-03 11:39:59 - ChronoCast - INFO - Started training run: run_20251203_113959
+2025-12-03 11:39:59 - ChronoCast - INFO - Model: Gradient Boosting
+2025-12-03 11:39:59 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "learning_rate": 0.1
+}
+2025-12-03 11:39:59 - ChronoCast - INFO - Training data: 408 samples, 36 features
+2025-12-03 11:40:00 - ChronoCast - INFO - Training completed in 0.84s
+2025-12-03 11:40:00 - ChronoCast - INFO - Metrics: {
+  "MSE": 14321.170625563542,
+  "RMSE": 119.67109352539377,
+  "MAE": 95.1470345242178,
+  "MAPE": 8.460559557906883,
+  "R\u00b2": 0.4524554607518212,
+  "SMAPE": 8.474161699458858,
+  "Bias": -7.866864738230358
+}
+2025-12-03 11:40:00 - ChronoCast - INFO - Started training run: run_20251203_114000
+2025-12-03 11:40:00 - ChronoCast - INFO - Model: XGBoost
+2025-12-03 11:40:00 - ChronoCast - INFO - Parameters: {
+  "n_estimators": 100,
+  "learning_rate": 0.1,
+  "max_depth": 6
+}
+2025-12-03 11:40:00 - ChronoCast - INFO - Training data: 408 samples, 36 features
+2025-12-03 11:40:00 - ChronoCast - INFO - Training completed in 0.42s
+2025-12-03 11:40:00 - ChronoCast - INFO - Metrics: {
+  "MSE": 16513.26953125,
+  "RMSE": 128.50396698643198,
+  "MAE": 100.50106048583984,
+  "MAPE": 8.713633567094803,
+  "R\u00b2": 0.36864447593688965,
+  "SMAPE": 8.929245689085828,
+  "Bias": -42.78564094094669
+}
+2025-12-03 11:40:22 - ChronoCast - INFO - Training history exported to: demo/training_history.json
+2025-12-03 11:40:22 - ChronoCast - INFO - Report generated: demo/training_report.txt

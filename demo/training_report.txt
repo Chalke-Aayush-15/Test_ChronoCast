@@ -1,0 +1,120 @@
+======================================================================
+ChronoCast Training Report
+======================================================================
+
+Total training runs: 5
+Report generated: 2025-12-13 15:35:44
+
+
+----------------------------------------------------------------------
+Run #1: run_20251213_153524
+----------------------------------------------------------------------
+Model: Linear Regression
+Status: completed
+Start: 2025-12-13T15:35:24.483134
+Training time: 0.04s
+Samples: 408
+Features: 36
+
+Metrics:
+  MSE: 10625.6711
+  RMSE: 103.0809
+  MAE: 80.3526
+  MAPE: 7.0133
+  R²: 0.5937
+  SMAPE: 7.1327
+  Bias: -18.5016
+
+Parameters:
+
+----------------------------------------------------------------------
+Run #2: run_20251213_153524
+----------------------------------------------------------------------
+Model: Ridge Regression
+Status: completed
+Start: 2025-12-13T15:35:24.574099
+Training time: 0.02s
+Samples: 408
+Features: 36
+
+Metrics:
+  MSE: 10161.5639
+  RMSE: 100.8046
+  MAE: 80.1984
+  MAPE: 7.0772
+  R²: 0.6115
+  SMAPE: 7.0745
+  Bias: -1.7414
+
+Parameters:
+  alpha: 10.0
+
+----------------------------------------------------------------------
+Run #3: run_20251213_153524
+----------------------------------------------------------------------
+Model: Random Forest
+Status: completed
+Start: 2025-12-13T15:35:24.605520
+Training time: 0.87s
+Samples: 408
+Features: 36
+
+Metrics:
+  MSE: 13058.2533
+  RMSE: 114.2727
+  MAE: 90.3607
+  MAPE: 7.9939
+  R²: 0.5007
+  SMAPE: 8.0500
+  Bias: -9.8050
+
+Parameters:
+  n_estimators: 100
+  max_depth: 15
+
+----------------------------------------------------------------------
+Run #4: run_20251213_153525
+----------------------------------------------------------------------
+Model: Gradient Boosting
+Status: completed
+Start: 2025-12-13T15:35:25.505170
+Training time: 0.92s
+Samples: 408
+Features: 36
+
+Metrics:
+  MSE: 14321.1706
+  RMSE: 119.6711
+  MAE: 95.1470
+  MAPE: 8.4606
+  R²: 0.4525
+  SMAPE: 8.4742
+  Bias: -7.8669
+
+Parameters:
+  n_estimators: 100
+  learning_rate: 0.1
+
+----------------------------------------------------------------------
+Run #5: run_20251213_153526
+----------------------------------------------------------------------
+Model: XGBoost
+Status: completed
+Start: 2025-12-13T15:35:26.434163
+Training time: 0.43s
+Samples: 408
+Features: 36
+
+Metrics:
+  MSE: 16513.2695
+  RMSE: 128.5040
+  MAE: 100.5011
+  MAPE: 8.7136
+  R²: 0.3686
+  SMAPE: 8.9292
+  Bias: -42.7856
+
+Parameters:
+  n_estimators: 100
+  learning_rate: 0.1
+  max_depth: 6

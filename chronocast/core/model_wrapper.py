@@ -62,8 +62,12 @@ class ChronoModel:
         # Default parameters for each model type
         default_params = self._get_default_params()
         
-        # Merge default with user-provided params
+        # Get valid parameter names for the model class
+        valid_params = model_class().get_params().keys()
+        
+        # Filter out invalid parameters
         params = {**default_params, **self.model_params}
+        params = {k: v for k, v in params.items() if k in valid_params}
         
         return model_class(**params)
     

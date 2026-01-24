@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { forecastAPI } from '../services/api';
 import { AlertCircle, ArrowLeft, X, ExternalLink } from 'lucide-react';
