@@ -79,6 +79,7 @@ export default function ForecastResultsPage() {
       
       console.log('Processed data:', processedData);
       setForecastData(processedData);
+      setShowModal(true); // Show the modal after data is loaded
     } catch (err) {
       setError('Failed to load forecast data');
       console.error(err);

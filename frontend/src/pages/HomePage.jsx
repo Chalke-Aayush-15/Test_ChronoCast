@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, BarChart3, GitCompare, Brain, TrendingUp, Zap, ArrowRight, LineChart, BarChart2, Clock, CheckCircle } from 'lucide-react';
+import YouTubeAnalytics from '../components/YouTubeAnalytics';
 
 const container = {
   hidden: { opacity: 0 },
@@ -144,6 +145,13 @@ export default function HomePage() {
           </motion.div>
         </div>
       </motion.section>
+
+      {/* YouTube Analytics Section */}
+      <section className="py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <YouTubeAnalytics />
+        </div>
+      </section>
 
       {/* Stats */}
       <motion.section 
