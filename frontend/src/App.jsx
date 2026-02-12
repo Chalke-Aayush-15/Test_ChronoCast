@@ -1,6 +1,6 @@
 import { unstable_HistoryRouter as Router, Routes, Route, Link, useLocation, Outlet } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { BarChart3, Upload, GitCompare, Home, Moon, Sun, Menu, X } from 'lucide-react';
+import { BarChart3, Upload, GitCompare, Home, Moon, Sun, Menu, X, Youtube } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 // Pages
@@ -10,6 +10,7 @@ import ForecastPage from './pages/ForecastPage';
 import ComparePage from './pages/ComparePage';
 import ResultsPage from './pages/ResultsPage';
 import ForecastResultsPage from './pages/ForecastResultsPage';
+import YouTubeDashboardPage from './pages/YouTubeDashboardPage';
 
 function Navigation() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function Navigation() {
     { path: '/upload', label: 'Upload Data', icon: Upload },
     { path: '/forecast', label: 'Forecast', icon: BarChart3 },
     { path: '/compare', label: 'Compare Models', icon: GitCompare },
+    { path: '/youtube', label: 'YouTube Analytics', icon: Youtube },
   ];
   
   return (
@@ -168,6 +170,8 @@ function App() {
           <Route path="/forecast/:forecastId" element={<ForecastResultsPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/results" element={<ResultsPage />} />
+          <Route path="/youtube-dashboard" element={<YouTubeDashboardPage />} />
+          <Route path="/youtube" element={<YouTubeDashboardPage />} />
         </Route>
       </Routes>
     </Router>
