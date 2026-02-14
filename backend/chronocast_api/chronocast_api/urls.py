@@ -17,6 +17,7 @@ from forecast.views import (
     ModelComparisonViewSet,
     ExplainabilityViewSet
 )
+from youtube.views import YouTubeAnalyticsViewSet
 
 # API Router
 router = DefaultRouter()
@@ -24,6 +25,7 @@ router.register(r'datasets', DatasetViewSet, basename='dataset')
 router.register(r'forecast-runs', ForecastRunViewSet, basename='forecastrun')
 router.register(r'comparisons', ModelComparisonViewSet, basename='comparison')
 router.register(r'explainability', ExplainabilityViewSet, basename='explainability')
+router.register(r'youtube', YouTubeAnalyticsViewSet, basename='youtube')
 
 # Swagger/OpenAPI schema
 schema_view = get_schema_view(

@@ -4,8 +4,11 @@ Minimal Django settings for ChronoCast API
 
 from pathlib import Path
 import os
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = BASE_DIR.parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-dev-key-change-in-production'
@@ -31,6 +34,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'forecast',  # ← IMPORTANT: This must be here
+    'youtube',   # YouTube Analytics app
 ]
 
 MIDDLEWARE = [
@@ -123,3 +127,6 @@ CHRONOCAST_UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Create media directories
 (BASE_DIR / 'media' / 'datasets').mkdir(parents=True, exist_ok=True)
+
+# YouTube API Configuration
+YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', 'your-youtube-api-key-here')

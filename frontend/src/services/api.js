@@ -177,6 +177,38 @@ export const pollForecastStatus = async (runId, onProgress, interval = 2000) => 
 };
 
 // ============================================================
+// YOUTUBE ANALYTICS
+// ============================================================
+
+export const youtubeAPI = {
+  // Get channel analytics
+  getChannelAnalytics: (channelId) => api.get(`/youtube/channel/${channelId}/analytics/`),
+  
+  // Get top performing content by type
+  getTopContent: (channelId, contentType = 'all') => 
+    api.get(`/youtube/channel/${channelId}/top-content/?type=${contentType}`),
+  
+  // Get video details
+  getVideoDetails: (videoId) => api.get(`/youtube/video/${videoId}/details/`),
+  
+  // Get channel videos by type
+  getChannelVideosByType: (channelId, type) => 
+    api.get(`/youtube/channel/${channelId}/videos/?type=${type}`),
+  
+  // Get shorts specifically
+  getShorts: (channelId) => api.get(`/youtube/channel/${channelId}/shorts/`),
+  
+  // Get live streams
+  getLiveStreams: (channelId) => api.get(`/youtube/channel/${channelId}/live-streams/`),
+  
+  // Get long videos
+  getLongVideos: (channelId) => api.get(`/youtube/channel/${channelId}/long-videos/`),
+  
+  // Get community posts
+  getCommunityPosts: (channelId) => api.get(`/youtube/channel/${channelId}/community-posts/`),
+};
+
+// ============================================================
 // ERROR HANDLER
 // ============================================================
 
