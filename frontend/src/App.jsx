@@ -33,7 +33,6 @@ function Navigation() {
     { path: '/upload', label: 'Upload Data', icon: Upload },
     { path: '/forecast', label: 'Forecast', icon: BarChart3 },
     { path: '/compare', label: 'Compare Models', icon: GitCompare },
-    { path: '/youtube', label: 'YouTube Analytics', icon: Youtube },
   ];
   
   return (
