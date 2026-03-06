@@ -1,0 +1,239 @@
+# ChronoCast Project Architecture Flow
+
+## System Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           CHRONOCAST ARCHITECTURE                              │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────┐    REST API    ┌─────────────────┐    Python Calls    ┌─────────────────┐
+│                 │ ◄─────────────► │                 │ ◄─────────────────► │                 │
+│   React         │                 │   Django         │                     │   ChronoCast    │
+│   Frontend      │                 │   Backend        │                     │   Library       │
+│                 │                 │                 │                     │                 │
+│ • Dashboard     │                 │ • REST API      │                     │ • 7 ML Models   │
+│ • Upload UI     │                 │ • Data Storage  │                     │ • Feature Eng.  │
+│ • Visualization │                 │ • Model Mgmt    │                     │ • SHAP Explain. │
+│ • Progress      │                 │ • File Handling │                     │ • Evaluation    │
+└─────────────────┘                 └─────────────────┘                     └─────────────────┘
+         │                                   │                                     │
+         │                                   │                                     │
+         ▼                                   ▼                                     ▼
+┌─────────────────┐                 ┌─────────────────┐                     ┌─────────────────┐
+│                 │                 │                 │                     │                 │
+│   User          │                 │   SQLite/       │                     │   Models        │
+│   Browser       │                 │   PostgreSQL    │                     │   • Linear      │
+│                 │                 │                 │                     │   • Ridge       │
+│ • Charts        │                 │ • Datasets      │                     │   • Random F.   │
+│ • Forms         │                 │ • Forecasts     │                     │   • XGBoost     │
+│ • Results       │                 │ • Models        │                     │   • GBM         │
+└─────────────────┘                 └─────────────────┘                     └─────────────────┘
+
+## Data Flow Process
+
+```
+USER UPLOADS DATA
+       │
+       ▼
+┌─────────────────┐
+│   React UI      │
+│  (File Upload)  │
+└─────────────────┘
+       │
+       ▼ HTTP POST /api/datasets/
+┌─────────────────┐
+│   Django API    │
+│  (Save File)    │
+└─────────────────┘
+       │
+       ▼
+┌─────────────────┐
+│   Database      │
+│ (Store Dataset) │
+└─────────────────┘
+       │
+       ▼
+┌─────────────────┐
+│   React UI      │
+│ (Configure)    │
+└─────────────────┘
+       │
+       ▼ HTTP POST /api/forecast-runs/
+┌─────────────────┐
+│   Django API    │
+│ (Start Forecast)│
+└─────────────────┘
+       │
+       ▼
+┌─────────────────┐
+│ ChronoCast     │
+│ Library        │
+│ • Load Data    │
+│ • Features     │
+│ • Train Model  │
+│ • Predict      │
+└─────────────────┘
+       │
+       ▼
+┌─────────────────┐
+│   Database      │
+│ (Save Results) │
+└─────────────────┘
+       │
+       ▼
+┌─────────────────┐
+│   React UI      │
+│ (Show Results) │
+└─────────────────┘
+```
+
+## Component Breakdown
+
+### Frontend (React)
+┌─────────────────────────────────────────────────┐
+│                REACT DASHBOARD                │
+├─────────────────────────────────────────────────┤
+│ • Dataset Upload Page                        │
+│ • Model Configuration Page                    │
+│ • Training Progress Page                      │
+│ • Results Dashboard Page                      │
+│ • Model Comparison Page                      │
+│ • Explainability Analysis Page                │
+└─────────────────────────────────────────────────┘
+
+### Backend (Django)
+┌─────────────────────────────────────────────────┐
+│              DJANGO REST API                  │
+├─────────────────────────────────────────────────┤
+│ • DatasetViewSet                            │
+│   - Upload, Validate, Preview                │
+│ • ForecastRunViewSet                         │
+│   - Create, Monitor, Results                 │
+│ • ModelComparisonViewSet                     │
+│   - Compare Multiple Models                   │
+│ • ExplainabilityViewSet                      │
+│   - SHAP Analysis                           │
+└─────────────────────────────────────────────────┘
+
+### ML Library (ChronoCast)
+┌─────────────────────────────────────────────────┐
+│            CHRONOCAST LIBRARY                │
+├─────────────────────────────────────────────────┤
+│ • ModelWrapper                              │
+│   - ChronoModel Class                       │
+│   - 7 ML Algorithms                        │
+│ • FeatureEngineering                        │
+│   - Lag Features                           │
+│   - Rolling Windows                        │
+│   - Time Features                         │
+│ • Evaluation                              │
+│   - 9 Metrics                            │
+│   - Model Comparison                     │
+│ • Explainability                         │
+│   - SHAP Integration                    │
+│   - Feature Importance                  │
+└─────────────────────────────────────────────────┘
+
+## Technology Stack
+
+```
+Frontend:    React 18 + Vite + Tailwind CSS + Plotly.js
+             │
+Backend:     Django REST Framework + Django CORS
+             │
+Database:    SQLite (Development) / PostgreSQL (Production)
+             │
+ML Library:  Python + scikit-learn + XGBoost + SHAP
+             │
+Deployment:  Heroku/AWS (Backend) + Vercel/Netlify (Frontend)
+```
+
+## API Endpoints Flow
+
+```
+┌─────────────────┐    POST    ┌─────────────────┐    GET     ┌─────────────────┐
+│   Upload UI     │ ─────────► │   /api/        │ ─────────► │   Dataset List  │
+│                 │           │   datasets/     │           │                 │
+└─────────────────┘           └─────────────────┘           └─────────────────┘
+                                     │
+                                     ▼ POST
+                            ┌─────────────────┐
+                            │   /api/        │
+                            │   forecast-runs/│
+                            └─────────────────┘
+                                     │
+                                     ▼ GET
+                            ┌─────────────────┐
+                            │   /api/        │
+                            │   forecast-runs/{id}/metrics │
+                            └─────────────────┘
+                                     │
+                                     ▼ POST
+                            ┌─────────────────┐
+                            │   /api/        │
+                            │   model-comparisons/ │
+                            └─────────────────┘
+```
+
+## File Structure Flow
+
+```
+chronocast_project/
+├── frontend/                 # React Dashboard
+│   ├── src/
+│   │   ├── pages/          # UI Pages
+│   │   ├── components/     # Reusable Components
+│   │   └── services/      # API Calls
+│   └── package.json
+├── backend/                  # Django API
+│   ├── chronocast_api/     # Main Project
+│   ├── forecast/           # Forecast App
+│   └── manage.py
+├── chronocast/              # ML Library
+│   ├── core/               # Core Modules
+│   │   ├── model_wrapper.py
+│   │   ├── feature_engineering.py
+│   │   ├── evaluation.py
+│   │   └── explainability.py
+│   └── utils/              # Utilities
+└── doc/                    # Documentation
+    ├── PRESENTATION.md
+    └── model_working_flow.txt
+```
+
+## Security & Data Flow
+
+```
+User Request → CORS Check → Authentication → Validation → Processing → Response
+      │              │               │             │           │
+      ▼              ▼               ▼             ▼           ▼
+   Browser       Django CORS    Django Auth   Input Validation  JSON Response
+   (HTTPS)       (Allowed)      (Optional)     (Required)      (API)
+```
+
+## Deployment Architecture
+
+```
+┌─────────────────┐    HTTPS    ┌─────────────────┐    HTTPS    ┌─────────────────┐
+│                 │ ◄───────────► │                 │ ◄───────────► │                 │
+│   User Browser  │               │   Frontend      │               │   Backend       │
+│   (Any Device)  │               │   (Vercel)      │               │   (Heroku)      │
+│                 │               │                 │               │                 │
+└─────────────────┘               └─────────────────┘               └─────────────────┘
+                                              │                                │
+                                              ▼                                ▼
+                                     ┌─────────────────┐              ┌─────────────────┐
+                                     │   Static CDN    │              │   Database      │
+                                     │   (Fast)        │              │   (PostgreSQL)  │
+                                     └─────────────────┘              └─────────────────┘
+```
+
+This architecture provides:
+- ✅ Scalable frontend with React
+- ✅ Robust backend with Django REST API
+- ✅ Powerful ML library with ChronoCast
+- ✅ Secure data handling and validation
+- ✅ Production-ready deployment setup
+- ✅ Clear separation of concerns
+- ✅ Easy maintenance and extension

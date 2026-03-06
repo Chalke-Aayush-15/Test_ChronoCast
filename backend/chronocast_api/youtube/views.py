@@ -132,58 +132,107 @@ class YouTubeAnalyticsViewSet(viewsets.ViewSet):
         """Get top performing content across all types"""
         content_type = request.query_params.get('type', 'all')
         
-        # Combine all content types
-        all_content = [
-            {
-                'id': 'short1',
-                'title': 'Quick Study Tips',
-                'type': 'Shorts',
-                'likes': 2450,
-                'comments': 320,
-                'shares': 78,
-                'views': 18700,
-                'engagementRate': 15.2
-            },
-            {
-                'id': 'live1',
-                'title': 'Study Session Live',
-                'type': 'Live Stream',
-                'likes': 980,
-                'comments': 145,
-                'shares': 32,
-                'views': 8900,
-                'engagementRate': 11.3
-            },
-            {
-                'id': 'long1',
-                'title': 'Complete Course Tutorial',
-                'type': 'Long Video',
-                'likes': 3450,
-                'comments': 420,
-                'shares': 95,
-                'views': 28700,
-                'engagementRate': 13.8
-            },
-            {
-                'id': 'post1',
-                'title': 'Behind the Scenes',
-                'type': 'Posts',
-                'likes': 780,
-                'comments': 98,
-                'shares': 23,
-                'views': 6500,
-                'engagementRate': 13.8
+        # Get real YouTube API data
+        api_key = self.get_youtube_api_key()
+        if not api_key:
+            return Response({"error": "YouTube API key not configured"}, status=500)
+        
+        try:
+            # Get channel's most popular videos
+            channel_url = f"https://www.googleapis.com/youtube/v3/search"
+            channel_params = {
+                'key': api_key,
+                'channelId': channel_id,
+                'part': 'snippet',
+                'order': 'viewCount',
+                'maxResults': 10,
+                'type': 'video'
             }
-        ]
-        
-        # Filter by content type if specified
-        if content_type != 'all':
-            all_content = [item for item in all_content if item['type'].lower() == content_type.lower()]
-        
-        # Sort by engagement rate
-        sorted_content = sorted(all_content, key=lambda x: x['engagementRate'], reverse=True)
-        
-        return Response(sorted_content)
+            
+            channel_response = requests.get(channel_url, params=channel_params)
+            channel_response.raise_for_status()
+            channel_data = channel_response.json()
+            
+            if 'items' not in channel_data or len(channel_data['items']) == 0:
+                return Response([])
+            
+            # Get video IDs for detailed statistics
+            video_ids = [item['id']['videoId'] for item in channel_data['items']]
+            
+            # Get detailed video statistics
+            stats_url = f"https://www.googleapis.com/youtube/v3/videos"
+            stats_params = {
+                'key': api_key,
+                'id': ','.join(video_ids),
+                'part': 'statistics,snippet,contentDetails'
+            }
+            
+            stats_response = requests.get(stats_url, params=stats_params)
+            stats_response.raise_for_status()
+            stats_data = stats_response.json()
+            
+            # Process and format the data
+            all_content = []
+            for video in stats_data.get('items', []):
+                video_id = video['id']
+                snippet = video['snippet']
+                stats = video['statistics']
+                content_details = video.get('contentDetails', {})
+                
+                # Determine video type based on duration
+                duration = content_details.get('duration', 'PT0S')
+                is_short = self._is_short_video(duration)
+                video_type = 'Shorts' if is_short else 'Long Video'
+                
+                # Calculate engagement rate
+                views = int(stats.get('viewCount', 0))
+                likes = int(stats.get('likeCount', 0))
+                comments = int(stats.get('commentCount', 0))
+                engagement_rate = ((likes + comments) / views * 1000) if views > 0 else 0
+                
+                all_content.append({
+                    'id': video_id,
+                    'title': snippet.get('title', 'Unknown Title'),
+                    'type': video_type,
+                    'likes': likes,
+                    'comments': comments,
+                    'shares': 0,  # YouTube API doesn't provide share count
+                    'views': views,
+                    'engagementRate': round(engagement_rate, 1),
+                    'thumbnail': snippet.get('thumbnails', {}).get('medium', {}).get('url', ''),
+                    'publishedAt': snippet.get('publishedAt', ''),
+                    'statistics': stats,
+                    'snippet': snippet
+                })
+            
+            # Sort by views (descending) to get top content
+            sorted_content = sorted(all_content, key=lambda x: x['views'], reverse=True)
+            
+            # Filter by content type if specified
+            if content_type != 'all':
+                sorted_content = [item for item in sorted_content if item['type'].lower() == content_type.lower()]
+            
+            return Response(sorted_content[:3])  # Return top 3
+            
+        except requests.exceptions.RequestException as e:
+            return Response({"error": f"YouTube API error: {str(e)}"}, status=500)
+        except Exception as e:
+            return Response({"error": f"Server error: {str(e)}"}, status=500)
+    
+    def _is_short_video(self, duration):
+        """Check if video is a short based on duration (YouTube Shorts are < 60 seconds)"""
+        try:
+            # Parse ISO 8601 duration format (PT4M13S)
+            import re
+            match = re.match(r'PT(?:(\d+)M)?(?:(\d+)S)?', duration)
+            if match:
+                minutes = int(match.group(1) or 0)
+                seconds = int(match.group(2) or 0)
+                total_seconds = minutes * 60 + seconds
+                return total_seconds <= 60
+            return False
+        except:
+            return False
     
     @action(detail=False, methods=['get'], url_path='video/(?P<video_id>[^/]+)/details')
     def video_details(self, request, video_id=None):

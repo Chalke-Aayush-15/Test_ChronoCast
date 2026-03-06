@@ -13,6 +13,7 @@ chronocast/core/feature_engineering.py
 chronocast/core/model_wrapper.py
 chronocast/core/visualization.py
 chronocast/utils/__init__.py
+chronocast/utils/data_fetchers.py
 chronocast/utils/data_loader.py
 chronocast/utils/logger.py
 tests/__init__.py

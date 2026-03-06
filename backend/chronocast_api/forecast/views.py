@@ -22,8 +22,8 @@ from .serializers import (
 )
 
 # Import ChronoCast
-from chronocast import (
-    ChronoModel,
+from chronocast_api import (
+    ChronoCastModel,
     create_all_features,
     evaluate_model,
     compare_models,
@@ -232,11 +232,17 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             forecast_run.save()
             
             # Train model
-            model = ChronoModel(
-                forecast_run.model_type,
-                **forecast_run.model_params
-            )
-            model.fit(X_train, y_train)
+            if forecast_run.model_type == 'chronocast':
+                # Use ChronoCast advanced model
+                model = ChronoCastModel(**forecast_run.model_params)
+                model.fit(X_train, y_train)
+            else:
+                # Use legacy ChronoModel for other types
+                model = ChronoModel(
+                    forecast_run.model_type,
+                    **forecast_run.model_params
+                )
+                model.fit(X_train, y_train)
             
             forecast_run.training_time = model.training_history['training_time']
             forecast_run.progress = 70

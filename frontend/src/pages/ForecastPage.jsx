@@ -100,6 +100,7 @@ export default function ForecastPage() {
     { value: 'rf', label: 'Random Forest', description: 'Ensemble of decision trees' },
     { value: 'gbm', label: 'Gradient Boosting', description: 'Sequential boosting algorithm' },
     { value: 'xgb', label: 'XGBoost', description: 'Optimized gradient boosting' },
+    { value: 'chronocast', label: 'ChronoCast', description: 'Advanced AI forecasting with trend, seasonality & spike detection' },
   ];
   
   return (
@@ -230,6 +231,72 @@ export default function ForecastPage() {
                   max="1"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
+              </div>
+            </div>
+          )}
+          
+          {modelType === 'chronocast' && (
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Trend Detection Sensitivity
+                </label>
+                <select
+                  value={modelParams.trend_sensitivity || 'medium'}
+                  onChange={(e) => setModelParams({ ...modelParams, trend_sensitivity: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="low">Low (5% threshold)</option>
+                  <option value="medium">Medium (15% threshold)</option>
+                  <option value="high">High (30% threshold)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Seasonality Detection
+                </label>
+                <select
+                  value={modelParams.seasonality_detection || 'auto'}
+                  onChange={(e) => setModelParams({ ...modelParams, seasonality_detection: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="auto">Auto-detect</option>
+                  <option value="weekly">Weekly patterns</option>
+                  <option value="monthly">Monthly patterns</option>
+                  <option value="none">No seasonality</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Anomaly Detection Threshold
+                </label>
+                <select
+                  value={modelParams.anomaly_threshold || '2sigma'}
+                  onChange={(e) => setModelParams({ ...modelParams, anomaly_threshold: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="1sigma">1 Sigma (68% confidence)</option>
+                  <option value="2sigma">2 Sigma (95% confidence)</option>
+                  <option value="3sigma">3 Sigma (99% confidence)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Forecast Confidence Level
+                </label>
+                <select
+                  value={modelParams.confidence_level || '95'}
+                  onChange={(e) => setModelParams({ ...modelParams, confidence_level: parseInt(e.target.value) })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="80">80% (Wider range)</option>
+                  <option value="90">90% (Medium range)</option>
+                  <option value="95">95% (Standard range)</option>
+                  <option value="99">99% (Narrow range)</option>
+                </select>
               </div>
             </div>
           )}
