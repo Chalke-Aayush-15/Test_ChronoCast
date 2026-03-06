@@ -10,6 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT = BASE_DIR.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+# Load environment variables from .env file for development
+from dotenv import load_dotenv
+load_dotenv(os.path.join(BASE_DIR.parent, '.env'))  # Try to load from backend/.env
+load_dotenv(os.path.join(BASE_DIR.parent, '.env.example'))  # Fallback to .env.example
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-dev-key-change-in-production'
 
@@ -129,4 +134,5 @@ CHRONOCAST_UPLOAD_DIR.mkdir(exist_ok=True)
 (BASE_DIR / 'media' / 'datasets').mkdir(parents=True, exist_ok=True)
 
 # YouTube API Configuration
-YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', 'your-youtube-api-key-here')
+# Get your YouTube Data API v3 key from: https://console.developers.google.com/
+YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', 'AIzaSyBp6Wj5YPdGe-GY9gVmO1BRzCQqDsKVp9A')

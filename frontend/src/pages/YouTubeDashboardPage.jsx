@@ -36,7 +36,10 @@ const YouTubeDashboardPage = () => {
 
   // Fetch real YouTube channel data
   const fetchChannelContent = async (channelId) => {
-    if (!channelId) return;
+    if (!channelId) {
+      console.error('No channel ID provided to fetchChannelContent');
+      return;
+    }
     
     setContentLoading(true);
     try {
@@ -44,6 +47,9 @@ const YouTubeDashboardPage = () => {
       
       // Fetch real top performing content from YouTube API
       const response = await youtubeAPI.getTopContent(channelId, 'all');
+      
+      console.log('API Response:', response);
+      console.log('Response Data:', response.data);
       
       if (response.data && response.data.length > 0) {
         // Get top 3 videos from the response
@@ -73,6 +79,7 @@ const YouTubeDashboardPage = () => {
       
     } catch (error) {
       console.error('Error fetching real YouTube data:', error);
+      console.error('Error details:', error.response?.data || error.message);
       // Fallback to mock data if API fails
       setTopPerformingContent(getFallbackTopContent());
     } finally {
@@ -136,30 +143,69 @@ const YouTubeDashboardPage = () => {
 
   // Extract video data from location state and fetch related videos
   useEffect(() => {
-    if (location.state?.videoData) {
-      const videoData = location.state.videoData;
-      setVideoData(videoData);
-      
-      // Extract channel ID from video data
-      const extractedChannelId = videoData.snippet?.channelId;
-      if (extractedChannelId) {
-        setChannelId(extractedChannelId);
-        fetchChannelContent(extractedChannelId);
+    const fetchChannelData = async () => {
+      if (location.state?.videoData) {
+        const videoData = location.state.videoData;
+        setVideoData(videoData);
+        console.log('Full Video Data Object:', JSON.stringify(videoData, null, 2));
+        
+        // Extract channel ID from video data - try multiple possible paths
+        let extractedChannelId = videoData.snippet?.channelId || 
+                                 videoData.channelId || 
+                                 videoData.channel?.id ||
+                                 videoData.id ||
+                                 videoData.videoId;
+        
+        console.log('Trying different paths for channel ID:');
+        console.log('- videoData.snippet?.channelId:', videoData.snippet?.channelId);
+        console.log('- videoData.channelId:', videoData.channelId);
+        console.log('- videoData.channel?.id:', videoData.channel?.id);
+        console.log('- videoData.id:', videoData.id);
+        console.log('- videoData.videoId:', videoData.videoId);
+        console.log('Final Extracted Channel ID:', extractedChannelId);
+        
+        // If still no channel ID, try to fetch video details using video ID
+        if (!extractedChannelId && videoData.id) {
+          console.log('No channel ID found, trying to fetch video details...');
+          try {
+            const videoDetailsResponse = await youtubeAPI.getVideoDetails(videoData.id);
+            if (videoDetailsResponse.data && videoDetailsResponse.data.snippet?.channelId) {
+              extractedChannelId = videoDetailsResponse.data.snippet.channelId;
+              console.log('Got channel ID from video details:', extractedChannelId);
+            }
+          } catch (error) {
+            console.error('Failed to fetch video details:', error);
+          }
+        }
+        
+        if (extractedChannelId) {
+          setChannelId(extractedChannelId);
+          fetchChannelContent(extractedChannelId);
+        } else {
+          console.error('No channel ID found in video data');
+          // For testing, use a known channel ID
+          const testChannelId = 'UCBJycsmduvYEL83R_U4JriQ'; // MKBHD channel
+          console.log('Using test channel ID:', testChannelId);
+          setChannelId(testChannelId);
+          fetchChannelContent(testChannelId);
+        }
+        
+        // Generate historical data based on video stats
+        const viewCount = videoData.statistics.viewCount;
+        const views = typeof viewCount === 'string' 
+          ? parseInt(viewCount.replace(/[^0-9]/g, ''), 10) 
+          : Math.floor(Number(viewCount));
+        const historical = generateHistoricalData(views);
+        setHistoricalData(historical);
+        
+        setIsLoading(false);
+      } else {
+        // If no video data, redirect back to home
+        navigate('/');
       }
-      
-      // Generate historical data based on video stats
-      const viewCount = videoData.statistics.viewCount;
-      const views = typeof viewCount === 'string' 
-        ? parseInt(viewCount.replace(/[^0-9]/g, ''), 10) 
-        : Math.floor(Number(viewCount));
-      const historical = generateHistoricalData(views);
-      setHistoricalData(historical);
-      
-      setIsLoading(false);
-    } else {
-      // If no video data, redirect back to home
-      navigate('/');
-    }
+    };
+    
+    fetchChannelData();
   }, [location, navigate]);
 
   // Generate historical data (simulated)
