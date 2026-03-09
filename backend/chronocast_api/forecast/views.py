@@ -28,7 +28,8 @@ from chronocast_api import (
     evaluate_model,
     compare_models,
     ModelExplainer,
-    TimeSeriesDataLoader
+    TimeSeriesDataLoader,
+    ChronoModel
 )
 
 import logging
@@ -234,17 +235,26 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             # Train model
             if forecast_run.model_type == 'chronocast':
                 # Use ChronoCast advanced model
-                model = ChronoCastModel(**forecast_run.model_params)
-                model.fit(X_train, y_train)
+                try:
+                    print(f"Creating ChronoCast model with params: {forecast_run.model_params}")
+                    model = ChronoCastModel(**forecast_run.model_params)
+                    print(f"ChronoCast model created successfully")
+                    model.fit(X_train, y_train)
+                    print(f"ChronoCast model fitted successfully")
+                except Exception as e:
+                    print(f"Error creating/fitting ChronoCast model: {str(e)}")
+                    raise ValueError(f"ChronoCast model error: {str(e)}")
             else:
                 # Use legacy ChronoModel for other types
+                if ChronoModel is None:
+                    raise ValueError(f"ChronoModel is not available. Please check the import.")
                 model = ChronoModel(
                     forecast_run.model_type,
                     **forecast_run.model_params
                 )
                 model.fit(X_train, y_train)
             
-            forecast_run.training_time = model.training_history['training_time']
+            forecast_run.training_time = model.training_history.get('training_time', 0) if hasattr(model, 'training_history') else 0
             forecast_run.progress = 70
             forecast_run.save()
             
@@ -258,9 +268,12 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             forecast_run.save()
             
             # Get feature importance
-            importance_df = model.get_feature_importance()
-            if importance_df is not None:
-                feature_importance = importance_df.to_dict(orient='records')
+            if hasattr(model, 'get_feature_importance'):
+                importance_df = model.get_feature_importance()
+                if importance_df is not None:
+                    feature_importance = importance_df.to_dict(orient='records')
+                else:
+                    feature_importance = None
             else:
                 feature_importance = None
             
@@ -281,7 +294,13 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             from django.conf import settings
             model_filename = f"model_{run_id}.pkl"
             model_path = Path(settings.CHRONOCAST_MODEL_DIR) / model_filename
-            model.save(str(model_path))
+            if hasattr(model, 'save'):
+                model.save(str(model_path))
+            else:
+                # Fallback: pickle the model
+                import pickle
+                with open(model_path, 'wb') as f:
+                    pickle.dump(model, f)
             
             # Update forecast run
             forecast_run.status = 'completed'

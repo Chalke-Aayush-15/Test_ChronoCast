@@ -235,6 +235,58 @@ export default function ForecastPage() {
             </div>
           )}
           
+          {(modelType === 'linear' || modelType === 'ridge') && (
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Fit Intercept
+                </label>
+                <select
+                  value={modelParams.fit_intercept !== undefined ? modelParams.fit_intercept : true}
+                  onChange={(e) => setModelParams({ ...modelParams, fit_intercept: e.target.value === 'true' })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="true">Yes (include bias)</option>
+                  <option value="false">No (no bias)</option>
+                </select>
+              </div>
+              
+              {modelType === 'ridge' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Regularization Strength (Alpha)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={modelParams.alpha || 1.0}
+                    onChange={(e) => setModelParams({ ...modelParams, alpha: parseFloat(e.target.value) })}
+                    min="0.01"
+                    max="10"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Higher values = stronger regularization
+                  </p>
+                </div>
+              )}
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Normalize Features
+                </label>
+                <select
+                  value={modelParams.normalize !== undefined ? modelParams.normalize : false}
+                  onChange={(e) => setModelParams({ ...modelParams, normalize: e.target.value === 'true' })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="false">No (keep original scale)</option>
+                  <option value="true">Yes (standardize features)</option>
+                </select>
+              </div>
+            </div>
+          )}
+          
           {modelType === 'chronocast' && (
             <div className="grid md:grid-cols-2 gap-4">
               <div>
