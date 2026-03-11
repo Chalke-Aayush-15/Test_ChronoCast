@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import time
 import logging
@@ -134,7 +135,8 @@ class ChronoCastModel:
             'linear': LinearRegression(),
             'ridge': Ridge(alpha=0.01),
             'rf': RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42),
-            'gbm': GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, random_state=42)
+            'gbm': GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, random_state=42),
+            'xgb': XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=5, random_state=42, objective='reg:squarederror')
         }
         
         # Train all models
@@ -219,7 +221,7 @@ class ChronoCastModel:
         
         # Ensemble predictions (weighted average)
         predictions = []
-        weights = {'linear': 0.2, 'ridge': 0.2, 'rf': 0.3, 'gbm': 0.3}
+        weights = {'linear': 0.15, 'ridge': 0.15, 'rf': 0.25, 'gbm': 0.2, 'xgb': 0.25}
         
         for name, model in self.models.items():
             try:
