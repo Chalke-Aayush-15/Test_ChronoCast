@@ -60,43 +60,20 @@ export default function ForecastResultsPage() {
         throw new Error('Invalid response format from server');
       }
 
-      const processedData = (response.data.results || []).map(item => {
-        const actualValue = item.actual === 'N/A' || item.actual === null || item.actual === undefined ? null : parseFloat(item.actual);
-        const predictedValue = item.predicted === 'N/A' || item.predicted === null || item.predicted === undefined ? null : parseFloat(item.predicted);
-        
-        console.log('Processing item:', item);
-        console.log('Actual value:', actualValue, 'Predicted value:', predictedValue);
-        
-        // Generate sample actual data if backend returns N/A
-        let actual = actualValue;
-        let predicted = predictedValue;
-        
-        if (actual === null && predicted !== null && !isNaN(predicted)) {
-          // Generate a realistic actual value close to predicted with some variation
-          const variation = (Math.random() - 0.5) * predicted * 0.2; // ±10% variation
-          actual = Math.max(0, predicted + variation); // Ensure non-negative
-          console.log('Generated sample actual value:', actual, 'for predicted:', predicted);
-        }
-        
-        const error = actual !== null && predicted !== null && !isNaN(actual) && !isNaN(predicted) ? Math.abs(actual - predicted) : null;
-        
-        return {
-          ...item,
-          date: item.date,
-          dateFormatted: format(new Date(item.date), 'MMM dd, yyyy'),
-          actual: actual,
-          predicted: predicted,
-          error: error,
-          errorPercentage: actual !== null && predicted !== null && actual !== 0 && !isNaN(actual) && !isNaN(predicted)
-            ? (Math.abs(actual - predicted) / Math.abs(actual)) * 100 
-            : null
-        };
-      });
+      const processedData = (response.data.results || []).map(item => ({
+        ...item,
+        date: item.date,
+        dateFormatted: format(new Date(item.date), 'MMM dd, yyyy'),
+        actual: parseFloat(item.actual) || null,
+        predicted: parseFloat(item.predicted) || null,
+        error: item.actual !== null && item.predicted !== null ? 
+          Math.abs(parseFloat(item.actual) - parseFloat(item.predicted)) : null,
+        errorPercentage: item.actual !== null && item.predicted !== null && parseFloat(item.actual) !== 0 
+          ? (Math.abs(parseFloat(item.actual) - parseFloat(item.predicted)) / Math.abs(parseFloat(item.actual))) * 100 
+          : null
+      }));
       
       console.log('Processed data:', processedData);
-      console.log('Sample data point:', processedData[0]);
-      console.log('Data with actual values:', processedData.filter(d => d.actual !== null).length);
-      console.log('Data with predicted values:', processedData.filter(d => d.predicted !== null).length);
       setForecastData(processedData);
       setShowModal(true);
     } catch (err) {
@@ -249,23 +226,6 @@ export default function ForecastResultsPage() {
               </div>
             )}
 
-            {/* Time Range Selection */}
-            <div className="flex justify-center space-x-2 mb-6">
-              {['week', 'month', 'quarter', 'all'].map((range) => (
-                <button
-                  key={range}
-                  onClick={() => setTimeRange(range)}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    timeRange === range
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
-                >
-                  {range.charAt(0).toUpperCase() + range.slice(1)}
-                </button>
-              ))}
-            </div>
-
             {/* Performance Metrics */}
             <div>
               <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Performance Metrics</h4>
@@ -339,153 +299,6 @@ export default function ForecastResultsPage() {
                 </div>
               )}
             </div>
-
-            {/* Visualization Charts */}
-            {forecastData.length > 0 && (
-              <div className="space-y-8">
-                <h4 className="text-lg font-medium text-gray-900 dark:text-white">Forecast Analysis</h4>
-                
-                {/* Forecast vs Actual Graph */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h5 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Forecast vs Actual</h5>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <RechartsLineChart data={forecastData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                      <XAxis 
-                        dataKey="dateFormatted" 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                      />
-                      <YAxis 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                          border: '1px solid #ccc',
-                          borderRadius: '4px'
-                        }}
-                        formatter={(value, name) => {
-                          if (value === null || value === undefined) return ['N/A', name];
-                          return [typeof value === 'number' ? value.toFixed(2) : value, name];
-                        }}
-                      />
-                      <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="actual" 
-                        stroke="#3b82f6" 
-                        strokeWidth={2}
-                        dot={{ fill: '#3b82f6', r: 4 }}
-                        name="Actual"
-                        connectNulls={false}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="predicted" 
-                        stroke="#10b981" 
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                        dot={{ fill: '#10b981', r: 4 }}
-                        name="Predicted"
-                        connectNulls={false}
-                      />
-                    </RechartsLineChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Error Distribution Graph */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h5 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Error Distribution</h5>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={forecastData.filter(d => d.error !== null)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                      <XAxis 
-                        dataKey="dateFormatted" 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                      />
-                      <YAxis 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                          border: '1px solid #ccc',
-                          borderRadius: '4px'
-                        }}
-                        formatter={(value) => {
-                          if (value === null || value === undefined) return ['N/A', 'Error'];
-                          return [typeof value === 'number' ? value.toFixed(2) : value, 'Error'];
-                        }}
-                      />
-                      <Legend />
-                      <Bar 
-                        dataKey="error" 
-                        fill="#ef4444"
-                        name="Error"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  {forecastData.filter(d => d.error !== null).length === 0 && (
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                      No error data available (missing actual values)
-                    </div>
-                  )}
-                </div>
-
-                {/* Actual vs Predicted Scatter Plot */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h5 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Actual vs Predicted</h5>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <ScatterChart>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                      <XAxis 
-                        type="number" 
-                        dataKey="actual" 
-                        name="Actual" 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                        label={{ value: 'Actual', position: 'insideBottom', offset: -5 }}
-                      />
-                      <YAxis 
-                        type="number" 
-                        dataKey="predicted" 
-                        name="Predicted" 
-                        tick={{ fontSize: 12 }}
-                        stroke="#666"
-                        label={{ value: 'Predicted', angle: -90, position: 'insideLeft' }}
-                      />
-                      <Tooltip 
-                        cursor={{ strokeDasharray: '3 3' }}
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                          border: '1px solid #ccc',
-                          borderRadius: '4px'
-                        }}
-                        formatter={(value, name) => {
-                          if (value === null || value === undefined) return ['N/A', name];
-                          return [typeof value === 'number' ? value.toFixed(2) : value, name];
-                        }}
-                      />
-                      <Scatter 
-                        name="Data Points" 
-                        data={forecastData.filter(d => d.actual !== null && d.predicted !== null)} 
-                        fill="#8b5cf6"
-                      />
-                    </ScatterChart>
-                  </ResponsiveContainer>
-                  {forecastData.filter(d => d.actual !== null && d.predicted !== null).length === 0 && (
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                      No scatter plot data available (missing actual or predicted values)
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
 
             <div className="mt-6">
               <button

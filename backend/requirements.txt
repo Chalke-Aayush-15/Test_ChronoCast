@@ -29,3 +29,7 @@ xgboost
 # Background tasks (optional)
 celery
 redis
+
+statsmodels
+prophet
+matplotlib

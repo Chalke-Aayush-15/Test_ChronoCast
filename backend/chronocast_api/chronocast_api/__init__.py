@@ -11,19 +11,44 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import time
 import logging
 import sys
-sys.path.append('c:\\Users\\sairajkale\\OneDrive\\Desktop\\ChronoCast\\Test_ChronoCast')
+import os
+
+# Add the chronocast package to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+chronocast_path = os.path.join(project_root, 'chronocast')
+if chronocast_path not in sys.path:
+    sys.path.insert(0, chronocast_path)
 
 # Import missing functions from main chronocast package
 try:
-    from chronocast.core.model_wrapper import ChronoModel
-    from chronocast.core.evaluation import compare_models
-    from chronocast.core.explainability import ModelExplainer
-except ImportError:
+    # Import ChronoCast
+    from chronocast import (
+        ChronoModel,
+        create_all_features,
+        evaluate_model,
+        compare_models,
+        ModelExplainer,
+        TimeSeriesDataLoader
+    )
+
+    # Import the new multi-model system
+    try:
+        from chronocast.core.chronocast_multimodel import ChronoCastMultiModel
+        MULTIMODEL_AVAILABLE = True
+        print("ChronoCastMultiModel imported successfully")
+    except ImportError as e:
+        MULTIMODEL_AVAILABLE = False
+        print(f"Warning: ChronoCastMultiModel not available: {e}")
+except ImportError as e:
     # Fallback if chronocast package is not available
-    print("Warning: ChronoModel not imported, using fallback implementation")
+    print(f"Warning: ChronoModel not imported, using fallback implementation: {e}")
     ChronoModel = None
     compare_models = None
     ModelExplainer = None
+    TimeSeriesDataLoader = None
+    create_all_features = None
+    evaluate_model = None
+    MULTIMODEL_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 

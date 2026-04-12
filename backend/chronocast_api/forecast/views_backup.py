@@ -43,22 +43,6 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
-def make_json_serializable(obj):
-    """Convert object to JSON-serializable format"""
-    if isinstance(obj, dict):
-        return {k: make_json_serializable(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [make_json_serializable(item) for item in obj]
-    elif isinstance(obj, (str, int, float, bool)) or obj is None:
-        return obj
-    elif hasattr(obj, 'tolist'):  # numpy arrays
-        return obj.tolist()
-    elif hasattr(obj, '__dict__'):
-        # For complex objects, try to extract basic attributes
-        return str(obj)
-    else:
-        return str(obj)
-
 
 class DatasetViewSet(viewsets.ModelViewSet):
     """
@@ -313,8 +297,7 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             if forecast_run.model_type == 'chronocast':
                 # For ChronoCastMultiModel
                 forecast_run.training_time = model.training_history.get('training_time', 0)
-                # Convert metrics to JSON-serializable format
-                metrics = make_json_serializable(model.metrics)
+                metrics = model.metrics
                 
                 # Get feature importance from XGBoost if available
                 feature_importance = model.feature_importance.get('xgboost', []) if model.feature_importance else []
@@ -333,12 +316,12 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
                         'model_type': 'chronocast_multimodel'
                     })
                 
-                # Add model comparison info (convert to JSON-serializable format)
-                model_comparison_info = make_json_serializable({
+                # Add model comparison info
+                model_comparison_info = {
                     'models_trained': model.training_history.get('models_trained', []),
                     'best_model': model.get_best_model()[0] if model.predictions else 'ensemble',
                     'all_metrics': model.metrics
-                })
+                }
                 
             else:
                 # For traditional models
@@ -372,7 +355,7 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
                         'predicted': float(pred),
                         'error': float(actual - pred)
                     })
-                
+            
                 model_comparison_info = None
             
             forecast_run.progress = 70
@@ -381,58 +364,6 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             forecast_run.save()
             
             # Save model
-            from django.conf import settings
-            model_filename = f"model_{run_id}.pkl"
-            model_path = Path(settings.CHRONOCAST_MODEL_DIR) / model_filename
-            if hasattr(model, 'save'):
-                model.save(str(model_path))
-            else:
-                # Fallback: pickle the model
-                import pickle
-                with open(model_path, 'wb') as f:
-                    pickle.dump(model, f)
-            
-            # Update forecast run
-            forecast_run.status = 'completed'
-            forecast_run.completed_at = timezone.now()
-            forecast_run.progress = 100
-            forecast_run.metrics = metrics
-            forecast_run.predictions = predictions_data
-            forecast_run.feature_importance = feature_importance
-            forecast_run.model_file = model_filename
-            
-            # Add model comparison info for ChronoCast
-            if forecast_run.model_type == 'chronocast' and model_comparison_info:
-                forecast_run.metrics['model_comparison'] = model_comparison_info
-            
-            forecast_run.save()
-            
-            logger.info(f"Forecast run completed: {run_id}")
-            
-        except Exception as e:
-            forecast_run.status = 'failed'
-            forecast_run.error_message = str(e)
-            forecast_run.completed_at = timezone.now()
-            forecast_run.save()
-            logger.error(f"Forecast run failed: {str(e)}\n{traceback.format_exc()}")
-            raise
-    
-    @action(detail=True, methods=['get'])
-    def metrics(self, request, pk=None):
-        """Get forecast metrics"""
-        forecast_run = self.get_object()
-        
-        if not forecast_run.metrics:
-            return Response(
-                {'error': 'Metrics not available yet'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        return Response(forecast_run.metrics)
-    
-    @action(detail=True, methods=['get'])
-    def predictions(self, request, pk=None):
-        """Get forecast predictions"""
         forecast_run = self.get_object()
         
         if not forecast_run.predictions:
@@ -456,62 +387,6 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             'page_size': page_size,
             'results': predictions
         })
-    
-    @action(detail=True, methods=['get'])
-    def chronocast_details(self, request, pk=None):
-        """Get detailed ChronoCast multi-model results"""
-        forecast_run = self.get_object()
-        
-        if forecast_run.model_type != 'chronocast':
-            return Response(
-                {'error': 'This endpoint is only available for ChronoCast model runs'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        if forecast_run.status != 'completed':
-            return Response(
-                {'error': 'Forecast must be completed first'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        try:
-            # Load the ChronoCast multi-model
-            from django.conf import settings
-            model_path = Path(settings.CHRONOCAST_MODEL_DIR) / forecast_run.model_file
-            import pickle
-            with open(model_path, 'rb') as f:
-                chronocast_model = pickle.load(f)
-            
-            # Get detailed results
-            details = {
-                'training_history': chronocast_model.training_history,
-                'models_trained': list(chronocast_model.predictions.keys()),
-                'best_model': chronocast_model.get_best_model()[0] if chronocast_model.predictions else 'ensemble',
-                'all_metrics': chronocast_model.metrics,
-                'feature_importance': chronocast_model.feature_importance,
-                'forecast_days': chronocast_model.forecast_days
-            }
-            
-            # Create summary table
-            if hasattr(chronocast_model, 'create_summary_table'):
-                # Load original data to create summary
-                dataset = forecast_run.dataset
-                loader = TimeSeriesDataLoader()
-                data = loader.load_csv(dataset.file.path, date_col=dataset.date_column)
-                chronocast_df = data[[dataset.date_column, dataset.target_column]].copy()
-                chronocast_df.columns = ['ds', 'y']
-                
-                summary_df = chronocast_model.create_summary_table(chronocast_df)
-                details['summary_table'] = summary_df.to_dict('records')
-            
-            return Response(details)
-            
-        except Exception as e:
-            logger.error(f"Error getting ChronoCast details: {str(e)}")
-            return Response(
-                {'error': f'Error loading ChronoCast details: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
     
     @action(detail=True, methods=['post'])
     def generate_explainability(self, request, pk=None):

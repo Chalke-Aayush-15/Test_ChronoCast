@@ -54,6 +54,7 @@ class ForecastRun(models.Model):
         ('dt', 'Decision Tree'),
         ('gbm', 'Gradient Boosting'),
         ('xgb', 'XGBoost'),
+        ('chronocast', 'ChronoCast'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

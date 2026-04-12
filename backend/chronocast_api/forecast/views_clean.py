@@ -43,22 +43,6 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
-def make_json_serializable(obj):
-    """Convert object to JSON-serializable format"""
-    if isinstance(obj, dict):
-        return {k: make_json_serializable(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [make_json_serializable(item) for item in obj]
-    elif isinstance(obj, (str, int, float, bool)) or obj is None:
-        return obj
-    elif hasattr(obj, 'tolist'):  # numpy arrays
-        return obj.tolist()
-    elif hasattr(obj, '__dict__'):
-        # For complex objects, try to extract basic attributes
-        return str(obj)
-    else:
-        return str(obj)
-
 
 class DatasetViewSet(viewsets.ModelViewSet):
     """
@@ -313,8 +297,7 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
             if forecast_run.model_type == 'chronocast':
                 # For ChronoCastMultiModel
                 forecast_run.training_time = model.training_history.get('training_time', 0)
-                # Convert metrics to JSON-serializable format
-                metrics = make_json_serializable(model.metrics)
+                metrics = model.metrics
                 
                 # Get feature importance from XGBoost if available
                 feature_importance = model.feature_importance.get('xgboost', []) if model.feature_importance else []
@@ -333,12 +316,12 @@ class ForecastRunViewSet(viewsets.ModelViewSet):
                         'model_type': 'chronocast_multimodel'
                     })
                 
-                # Add model comparison info (convert to JSON-serializable format)
-                model_comparison_info = make_json_serializable({
+                # Add model comparison info
+                model_comparison_info = {
                     'models_trained': model.training_history.get('models_trained', []),
                     'best_model': model.get_best_model()[0] if model.predictions else 'ensemble',
                     'all_metrics': model.metrics
-                })
+                }
                 
             else:
                 # For traditional models
